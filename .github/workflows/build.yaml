@@ -1,0 +1,34 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Visual Studio
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+
+      - name: Build 7-Zip and NSIS
+        run: 7-zip-build.bat
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            bin/*.7z
+            bin/*.zip
+            bin/*.exe
+            bin/*.dll
+            bin/*.sfx
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
