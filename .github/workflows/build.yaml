@@ -23,7 +23,7 @@ jobs:
         run: call 7-zip-build.bat
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: binaries
           path: bin/
