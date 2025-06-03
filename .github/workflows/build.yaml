@@ -22,17 +22,27 @@ jobs:
         shell: cmd /c {0}
         run: call 7-zip-build.bat
 
+      - name: Collect artifacts
+        run: |
+          mkdir artifacts
+          copy *.7z artifacts\
+          copy *.zip artifacts\
+          copy *.exe artifacts\
+          copy *.dll artifacts\
+          copy *.sfx artifacts\
+          dir artifacts
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: binaries
-          path: bin/
+          path: artifacts/
           retention-days: 1
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
-          files: bin/*
+          files: artifacts/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
